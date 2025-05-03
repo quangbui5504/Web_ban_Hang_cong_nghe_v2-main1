@@ -7,6 +7,7 @@ use Carbon\Carbon;
 $now = Carbon::today()->format('Y-m-d');
 $subdays = Carbon::today()->subDays(7)->format('Y-m-d');
 $limit = 5;
+$sort_order = 'DESC';
 
 if (isset($_POST['start_date']) && isset($_POST['end_date'])) {
     $start_date = $_POST['start_date'];
@@ -30,6 +31,10 @@ if (isset($_POST['limit']) && in_array($_POST['limit'], [5, 10, 25, 50, 100])) {
     $limit = (int)$_POST['limit'];
 }
 
+if (isset($_POST['sort_order']) && in_array(strtoupper($_POST['sort_order']), ['ASC', 'DESC'])) {
+    $sort_order = strtoupper($_POST['sort_order']);
+}
+
 $sql = "
     SELECT 
         u.id_user,
@@ -44,7 +49,7 @@ $sql = "
     WHERE c.cart_date BETWEEN ? AND ?
     AND c.cart_status = 0
     GROUP BY u.id_user, u.fullname, u.email
-    ORDER BY total_spent DESC
+    ORDER BY total_spent ?
     LIMIT ?
 ";
 
@@ -54,7 +59,7 @@ if (!$stmt) {
     exit;
 }
 
-$stmt->bind_param("ssi", $subdays, $now, $limit);
+$stmt->bind_param("sssi", $subdays, $now, $sort_order, $limit);
 $stmt->execute();
 $result = $stmt->get_result();
 $consumers = [];

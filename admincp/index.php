@@ -169,6 +169,7 @@
                 var startDate = $("#start-date2").val();
                 var endDate = $("#end-date2").val();
                 var limit = $("#top-consumers-limit").val();
+                var sortOrder = $("#top-consumers-sort").val();
                 if (!startDate || !endDate) {
                     return;
                 }
@@ -181,7 +182,8 @@
                     data: {
                         start_date: startDate,
                         end_date: endDate,
-                        limit: limit
+                        limit: limit,
+                        sort_order: sortOrder
                     },
                     success: function(data) {
                         var tbody = $("#top-consumers-table tbody");
@@ -207,7 +209,7 @@
                 });
             }
 
-            $("#top-consumers-limit").change(function() {
+            $("#top-consumers-limit, #top-consumers-sort").change(function() {
                 updateTopConsumers();
             });
 
@@ -228,7 +230,7 @@
                         var tbody = $("#consumer-orders-table tbody");
                         tbody.empty();
                         if (data.length === 0) {
-                            tbody.append('<tr><td colspan="4">Không có đơn hàng nào</td></tr>');
+                            tbody.append('<tr><td colspan="5">Không có đơn hàng nào</td></tr>');
                         } else {
                             $.each(data, function(index, order) {
                                 var status = order.cart_status == 0 ? "Hoàn thành" : "Chưa xử lý";

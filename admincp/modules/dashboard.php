@@ -79,6 +79,12 @@ while ($row_se2 = mysqli_fetch_array($query_se2)) {
                     <option value="50">Top 50</option>
                     <option value="100">Top 100</option>
                 </select>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Sắp xếp theo tổng chi tiêu: 
+                <select id="top-consumers-sort" class="select-limit">
+                    <option value="desc" selected>Giảm dần</option>
+                    <option value="asc">Tăng dần</option>
+                </select>
             </p>
             <table id="top-consumers-table" class="consumer-table">
                 <thead>
