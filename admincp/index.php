@@ -132,6 +132,7 @@
                     success: function(data) {
                         if (data.length === 0) {
                             $('#text-date').text("Không có dữ liệu trong khoảng thời gian này");
+                            char.setData([]);
                             return;
                         }
                         char.setData(data);
@@ -157,6 +158,7 @@
                     success: function(data) {
                         if (data.length === 0) {
                             $('#text-date1').text("Không có dữ liệu trong khoảng thời gian này");
+                            char1.setData([]);
                             return;
                         }
                         char1.setData(data);
