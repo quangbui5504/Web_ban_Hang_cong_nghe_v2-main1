@@ -122,7 +122,7 @@ echo "
   </li>";?>
   <li>
   <div class='iocn-link'>
-        <a href='\Web_ban_Hang_cong_nghe_v2-main\pages\main\logout.php'>
+        <a href='../pages/main/logout.php'>
           <i class='fa fa-sign-out'></i>
           <span class='link_name'>Đăng xuất</span>
         </a>
@@ -130,7 +130,7 @@ echo "
       </div>
 
       <ul class='sub-menu'>
-        <li><a class='link_name' href='\Web_ban_Hang_cong_nghe_v2-main\pages\main\logout.php'>Đăng xuất</a></li>
+        <li><a class='link_name' href='../pages/main/logout.php'>Đăng xuất</a></li>
 
       </ul>
   </li>

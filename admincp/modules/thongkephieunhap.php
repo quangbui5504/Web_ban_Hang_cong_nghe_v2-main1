@@ -1,39 +1,30 @@
 <?php
 include('../config/config.php');
 require('../../carbon/autoload.php');
-$currentDate = new DateTime();
-$now = $currentDate->format('Y-m-d');
-if (isset($_POST['thoigian'])) {
-    $thoigian = $_POST['thoigian'];
-} else {
-    $thoigian = '';
-    $currentDate = new DateTime();
-    $currentDate->sub(new DateInterval('P365D'));
-    $subdays = $currentDate->format('Y-m-d');
+
+use Carbon\Carbon;
+
+$now = Carbon::today()->format('Y-m-d');
+$subdays = Carbon::today()->subDays(7)->format('Y-m-d'); // Default to last 7 days
+
+if (isset($_POST['start_date']) && isset($_POST['end_date'])) {
+    $start_date = $_POST['start_date'];
+    $end_date = $_POST['end_date'];
+
+    try {
+        $start = Carbon::createFromFormat('Y-m-d', $start_date);
+        $end = Carbon::createFromFormat('Y-m-d', $end_date);
+
+        if ($start && $end && $start <= $end) {
+            $subdays = $start->format('Y-m-d');
+            $now = $end->format('Y-m-d');
+        }
+    } catch (Exception $e) {
+        $subdays = Carbon::today()->subDays(7)->format('Y-m-d');
+        $now = Carbon::today()->format('Y-m-d');
+    }
 }
 
-
-if ($thoigian == '7ngay') {
-    $currentDate = new DateTime();
-    $currentDate->sub(new DateInterval('P7D'));
-    $subdays = $currentDate->format('Y-m-d');
-} elseif ($thoigian == '28ngay') {
-    $currentDate = new DateTime();
-    $currentDate->sub(new DateInterval('P28D'));
-    $subdays = $currentDate->format('Y-m-d');
-} elseif ($thoigian == '90ngay') {
-    $currentDate = new DateTime();
-    $currentDate->sub(new DateInterval('P90D'));
-    $subdays = $currentDate->format('Y-m-d');
-} elseif ($thoigian == '365ngay') {
-    $currentDate = new DateTime();
-    $currentDate->sub(new DateInterval('P365D'));
-    $subdays = $currentDate->format('Y-m-d');
-}
-
-
-$currentDate = new DateTime();
-$now = $currentDate->format('Y-m-d');
 $sql = "SELECT * FROM tbl_sanpham";
 $sql_query = mysqli_query($mysqli, $sql);
 $listsp = array();
@@ -47,7 +38,8 @@ while ($val = mysqli_fetch_array($sql_query)) {
     );
 }
 $listsp = $chart_data;
-$sql = "SELECT * FROM tbl_phieunhap WHERE thoigian BETWEEN '$subdays' AND '$now' ORDER BY thoigian ASC";
+
+$sql = "SELECT * FROM tbl_phieunhap WHERE DATE(thoigian) BETWEEN '$subdays' AND '$now' ORDER BY DATE(thoigian) ASC";
 $sql_query = mysqli_query($mysqli, $sql);
 while ($val = mysqli_fetch_array($sql_query)) {
     $idtmp = $val['id_phieunhap'];
@@ -62,7 +54,9 @@ while ($val = mysqli_fetch_array($sql_query)) {
         }
     }
 }
+
 foreach ($listsp as &$item) {
     unset($item['id']);
 }
-echo $data = json_encode($listsp);?>
+echo json_encode($listsp);
+?>
