@@ -49,7 +49,7 @@ $sql = "
     WHERE c.cart_date BETWEEN ? AND ?
     AND c.cart_status = 0
     GROUP BY u.id_user, u.fullname, u.email
-    ORDER BY total_spent ?
+    ORDER BY total_spent $sort_order
     LIMIT ?
 ";
 
@@ -59,7 +59,7 @@ if (!$stmt) {
     exit;
 }
 
-$stmt->bind_param("sssi", $subdays, $now, $sort_order, $limit);
+$stmt->bind_param("ssi", $subdays, $now, $limit);
 $stmt->execute();
 $result = $stmt->get_result();
 $consumers = [];
