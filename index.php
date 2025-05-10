@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,7 +47,6 @@
 <body>
   <div class="wrapper">
     <?php
-    session_start();
     include './admincp/config/config.php';
     ?>
 
